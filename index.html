@@ -296,8 +296,9 @@ const App = () => {
     return (
         <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter">
             {/* Hidden div to ensure all dynamic Tailwind classes are included in the build */}
-            {/* This is a workaround for Tailwind JIT mode with dynamic class generation */}
+            {/* This is a workaround for Tailwind JIT mode with dynamic class generation when using CDN */}
             <div className="hidden">
+                {/* Browser Card Colors */}
                 <div className="border-teal-400 bg-teal-500"></div>
                 <div className="border-yellow-300 bg-yellow-400"></div>
                 <div className="border-orange-400 bg-orange-500"></div>
@@ -305,11 +306,25 @@ const App = () => {
                 <div className="border-red-400 bg-red-500"></div>
                 <div className="border-blue-400 bg-blue-500"></div>
                 <div className="border-gray-300 bg-gray-400"></div>
-                <div className="border-green-600 bg-green-600"></div>
-                <div className="border-blue-600 bg-blue-600"></div>
+
+                {/* Navigation Button Colors (active state) */}
+                <div className="bg-green-600 border-green-600 text-white shadow-md"></div>
+                <div className="bg-blue-600 border-blue-600 text-white shadow-md"></div>
+
+                {/* Navigation Button Colors (default state) */}
+                <div className="bg-white border-green-300 text-gray-700"></div>
+                <div className="bg-white border-blue-300 text-gray-700"></div>
+
+                {/* Navigation Button Hover States */}
                 <div className="hover:bg-green-50 hover:border-green-400"></div>
                 <div className="hover:bg-blue-50 hover:border-blue-400"></div>
-                <div className="hover:scale-105 hover:shadow-2xl"></div>
+
+                {/* Navigation Button Focus Ring States */}
+                <div className="focus:ring-green-500"></div>
+                <div className="focus:ring-blue-500"></div>
+
+                {/* Browser Card Hover Effects */}
+                <div className="hover:scale-103 hover:shadow-2xl"></div>
             </div>
             <Header />
             <MainContent selectedConfig={selectedConfig} onSelectConfig={handleSelectConfiguration} />
