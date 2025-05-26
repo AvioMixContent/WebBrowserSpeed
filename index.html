@@ -143,32 +143,16 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
     const isSafariNA = browserName === 'safari' && score === 0;
     const barWidth = `calc((${score} / ${maxScore}) * 100%)`;
 
-    // Determine the full class strings directly in JSX for Tailwind CDN compatibility
-    // This makes sure all class names are explicitly present in the source for Tailwind's JIT compiler.
-    const cardBorderClass = isSafariNA
-        ? 'border-gray-300'
-        : browserName === 'edge' ? 'border-teal-400'
-        : browserName === 'chrome' ? 'border-yellow-300'
-        : browserName === 'firefox' ? 'border-orange-400'
-        : browserName === 'brave' ? 'border-amber-400'
-        : browserName === 'opera' ? 'border-red-400'
-        : browserName === 'safari' ? 'border-blue-400'
-        : 'border-gray-400'; // Fallback
-
-    const barBgClass = isSafariNA
-        ? 'bg-gray-400'
-        : browserName === 'edge' ? 'bg-teal-500'
-        : browserName === 'chrome' ? 'bg-yellow-400'
-        : browserName === 'firefox' ? 'bg-orange-500'
-        : browserName === 'brave' ? 'bg-amber-500'
-        : browserName === 'opera' ? 'bg-red-500'
-        : browserName === 'safari' ? 'bg-blue-500'
-        : 'bg-gray-500'; // Fallback
-
     return (
         <div className={`
             bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2
-            ${cardBorderClass}
+            ${isSafariNA ? 'border-gray-300' : ''}
+            ${!isSafariNA && browserName === 'edge' ? 'border-teal-400' : ''}
+            ${!isSafariNA && browserName === 'chrome' ? 'border-yellow-300' : ''}
+            ${!isSafariNA && browserName === 'firefox' ? 'border-orange-400' : ''}
+            ${!isSafariNA && browserName === 'brave' ? 'border-amber-400' : ''}
+            ${!isSafariNA && browserName === 'opera' ? 'border-red-400' : ''}
+            ${!isSafariNA && browserName === 'safari' ? 'border-blue-400' : ''}
             hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out
         `} data-browser={browserName}>
             <img
@@ -180,7 +164,15 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
             />
             <p className="font-semibold text-xl text-gray-800 mb-2 capitalize">{browserName}</p>
             <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center">
-                <div className={`h-full ${barBgClass} rounded-lg`} style={{ width: barWidth }}></div>
+                <div className={`h-full rounded-lg
+                    ${isSafariNA ? 'bg-gray-400' : ''}
+                    ${!isSafariNA && browserName === 'edge' ? 'bg-teal-500' : ''}
+                    ${!isSafariNA && browserName === 'chrome' ? 'bg-yellow-400' : ''}
+                    ${!isSafariNA && browserName === 'firefox' ? 'bg-orange-500' : ''}
+                    ${!isSafariNA && browserName === 'brave' ? 'bg-amber-500' : ''}
+                    ${!isSafariNA && browserName === 'opera' ? 'bg-red-500' : ''}
+                    ${!isSafariNA && browserName === 'safari' ? 'bg-blue-500' : ''}
+                `} style={{ width: barWidth }}></div>
             </div>
             <div className="flex items-baseline mt-3">
                 <span className="font-bold text-3xl text-gray-900 mr-1">
@@ -258,41 +250,70 @@ const App = () => {
 
     return (
         <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter">
-            {/* This hidden div is a workaround for Tailwind CSS CDN's JIT mode.
-                When using Tailwind via CDN, the JIT compiler scans your HTML/JSX to find classes.
-                By explicitly listing all possible dynamic class combinations here,
-                we "force" the JIT compiler to include these styles in the generated CSS.
+            {/* This hidden div explicitly lists all Tailwind CSS classes used in the application.
+                This is a workaround for Tailwind CSS CDN's JIT mode, which might fail to detect
+                dynamically constructed class names in JavaScript. By listing them here,
+                we "force" the JIT compiler to include these styles in the generated CSS,
+                ensuring proper rendering on static hosting environments like GitHub Pages.
                 For a production environment, a full Tailwind build process (using PostCSS)
                 is generally recommended over the CDN for better reliability and optimization.
             */}
             <div className="hidden">
-                {/* Explicitly list all Tailwind classes used in the application to ensure CDN picks them up */}
-                <div className="bg-gray-900 h-8 px-4 shadow-lg rounded-b-xl text-gray-300 hover:text-white transition-colors duration-200 text-xs"></div>
-                <div className="text-xl sm:text-2xl font-bold leading-tight text-black text-xs sm:text-sm"></div>
-                <div className="w-full mb-6 sm:mb-8 flex flex-wrap justify-center gap-2 flex-1 min-w-0"></div>
-                <div className="px-2 py-2 rounded-lg text-xs font-semibold border-2 transition-all duration-300 ease-in-out shadow-sm text-center"></div>
+                {/* Header classes */}
+                <div className="w-full max-w-5xl mx-auto bg-gray-900 h-8 flex items-center justify-end px-4 shadow-lg rounded-b-xl"></div>
+                <div className="text-gray-300 flex items-center hover:text-white transition-colors duration-200 text-xs"></div>
+                <div className="space-x-2"></div>
+
+                {/* Page Header classes */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8"></div>
+                <div className="flex items-center mb-4 sm:mb-0"></div>
+                <div className="text-xl sm:text-2xl font-bold leading-tight text-black"></div>
+                <div className="text-xs sm:text-sm font-bold leading-tight text-black"></div>
+
+                {/* Navigation classes */}
+                <div className="w-full mb-6 sm:mb-8"></div>
+                <div className="flex flex-wrap justify-center gap-2"></div>
+                <div className="flex-1 min-w-0"></div>
+                <div className="w-full px-2 py-2 rounded-lg text-xs font-semibold border-2 transition-all duration-300 ease-in-out shadow-sm text-center"></div>
                 <div className="bg-green-600 border-green-600 text-white shadow-md"></div>
                 <div className="bg-blue-600 border-blue-600 text-white shadow-md"></div>
                 <div className="bg-white border-green-300 text-gray-700 hover:bg-green-50 hover:border-green-400"></div>
                 <div className="bg-white border-blue-300 text-gray-700 hover:bg-blue-50 hover:border-blue-400"></div>
                 <div className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-blue-500 active:scale-98"></div>
-                <div className="relative w-full h-40 rounded-xl overflow-hidden shadow-xl mb-8 bg-black bg-opacity-30 text-3xl font-extrabold mb-2 drop-shadow-lg text-lg text-gray-100 drop-shadow-md"></div>
+
+                {/* Hero Section classes */}
+                <div className="relative w-full h-40 rounded-xl overflow-hidden shadow-xl mb-8"></div>
+                <div className="absolute inset-0 w-full h-full object-cover filter brightness-75"></div>
+                <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-white bg-black bg-opacity-30"></div>
+                <div className="text-3xl font-extrabold mb-2 drop-shadow-lg"></div>
+                <div className="text-lg text-gray-100 drop-shadow-md"></div>
+
+                {/* Browser Card classes */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="browser-cards-container"></div>
                 <div className="bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2 hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out"></div>
-                <div className="w-14 h-14 mb-3 font-semibold text-xl text-gray-800 mb-2 capitalize"></div>
+                <div className="w-14 h-14 mb-3"></div>
+                <div className="font-semibold text-xl text-gray-800 mb-2 capitalize"></div>
                 <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center"></div>
-                <div className="font-bold text-3xl text-gray-900 mr-1 text-base text-gray-600"></div>
+                <div className="h-full rounded-lg"></div>
+                <div className="font-bold text-3xl text-gray-900 mr-1"></div>
+                <div className="text-base text-gray-600"></div>
+
+                {/* Specific Browser Card Colors (for dynamic application) */}
+                <div className="border-gray-300 bg-gray-400"></div> {/* Safari NA */}
+                <div className="border-teal-400 bg-teal-500"></div> {/* Edge */}
+                <div className="border-yellow-300 bg-yellow-400"></div> {/* Chrome */}
+                <div className="border-orange-400 bg-orange-500"></div> {/* Firefox */}
+                <div className="border-amber-400 bg-amber-500"></div> {/* Brave */}
+                <div className="border-red-400 bg-red-500"></div> {/* Opera */}
+                <div className="border-blue-400 bg-blue-500"></div> {/* Safari */}
+                <div className="border-gray-400 bg-gray-500"></div> {/* Fallback */}
+
+                {/* Footer classes */}
                 <div className="text-center text-gray-500 text-sm mt-10"></div>
-                <div className="bg-gray-900 text-white text-center py-4 shadow-lg rounded-t-xl"></div>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 items-start mr-6"></div>
-                <div className="lucide lucide-mail lucide lucide-facebook lucide lucide-instagram lucide lucide-gauge"></div>
-                <div className="bg-teal-500 border-teal-400"></div>
-                <div className="bg-yellow-400 border-yellow-300"></div>
-                <div className="bg-orange-500 border-orange-400"></div>
-                <div className="bg-amber-500 border-amber-400"></div>
-                <div className="bg-red-500 border-red-400"></div>
-                <div className="bg-blue-500 border-blue-400"></div>
-                <div className="bg-gray-400 border-gray-300"></div>
-                <div className="bg-gray-500 border-gray-400"></div>
+                <div className="w-full max-w-5xl mx-auto bg-gray-900 text-white text-center py-4 shadow-lg rounded-t-xl"></div>
+
+                {/* Root App classes */}
+                <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter"></div>
             </div>
             <Header />
             <MainContent selectedConfig={selectedConfig} onSelectConfig={handleSelectConfiguration} />
