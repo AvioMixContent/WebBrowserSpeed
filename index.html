@@ -335,8 +335,11 @@ const App = () => {
                 For a production environment, a full Tailwind build process (using PostCSS)
                 is generally recommended over the CDN for better reliability and optimization.
             */}
+            {/* This hidden div is now less critical for BrowserCard's dynamic classes
+                due to explicit class definitions within BrowserCard, but it's kept
+                for other potential dynamic classes or general robustness with CDN. */}
             <div className="hidden">
-                {/* Browser Card Colors */}
+                {/* Browser Card Colors - these are now mostly handled explicitly in BrowserCard */}
                 <div className="border-teal-400 bg-teal-500"></div>
                 <div className="border-yellow-300 bg-yellow-400"></div>
                 <div className="border-orange-400 bg-orange-500"></div>
