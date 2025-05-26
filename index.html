@@ -146,54 +146,39 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
     const isSafariNA = browserName === 'safari' && score === 0;
     const barWidth = `calc((${score} / ${maxScore}) * 100%)`;
 
-    // Determine classes based on browserName and isSafariNA
-    // Explicitly define full class strings for Tailwind to pick up reliably
-    let barBgClass = '';
-    let borderClass = '';
-    let scoreTextClass = 'text-gray-600'; // Default for points
-
-    if (isSafariNA) {
-        barBgClass = 'bg-gray-400';
-        borderClass = 'border-gray-300';
-        scoreTextClass = 'text-gray-600'; // For "Not available" text
-    } else {
-        switch (browserName) {
-            case 'edge':
-                barBgClass = 'bg-teal-500';
-                borderClass = 'border-teal-400';
-                break;
-            case 'chrome':
-                barBgClass = 'bg-yellow-400';
-                borderClass = 'border-yellow-300';
-                break;
-            case 'firefox':
-                barBgClass = 'bg-orange-500';
-                borderClass = 'border-orange-400';
-                break;
-            case 'brave':
-                barBgClass = 'bg-amber-500';
-                borderClass = 'border-amber-400';
-                break;
-            case 'opera':
-                barBgClass = 'bg-red-500';
-                borderClass = 'border-red-400';
-                break;
-            case 'safari': // This case is for when Safari *does* have a score > 0
-                barBgClass = 'bg-blue-500';
-                borderClass = 'border-blue-400';
-                break;
-            default:
-                // Fallback or error case
-                barBgClass = 'bg-gray-500';
-                borderClass = 'border-gray-400';
-                break;
+    // Helper functions to return full, static Tailwind class strings
+    const getBarBgClass = (name, isNA) => {
+        if (isNA) return 'bg-gray-400';
+        switch (name) {
+            case 'edge': return 'bg-teal-500';
+            case 'chrome': return 'bg-yellow-400';
+            case 'firefox': return 'bg-orange-500';
+            case 'brave': return 'bg-amber-500';
+            case 'opera': return 'bg-red-500';
+            case 'safari': return 'bg-blue-500';
+            default: return 'bg-gray-500'; // Fallback
         }
-    }
+    };
+
+    const getBorderClass = (name, isNA) => {
+        if (isNA) return 'border-gray-300';
+        switch (name) {
+            case 'edge': return 'border-teal-400';
+            case 'chrome': return 'border-yellow-300';
+            case 'firefox': return 'border-orange-400';
+            case 'brave': return 'border-amber-400';
+            case 'opera': return 'border-red-400';
+            case 'safari': return 'border-blue-400';
+            default: return 'border-gray-400'; // Fallback
+        }
+    };
+
+    const scoreTextClass = isSafariNA ? 'text-gray-600' : 'text-gray-600'; // Still consistent
 
     return (
         <div className={`
             bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2
-            ${borderClass}
+            ${getBorderClass(browserName, isSafariNA)}
             hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out
         `} data-browser={browserName}>
             <img
@@ -205,7 +190,7 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
             />
             <p className="font-semibold text-xl text-gray-800 mb-2 capitalize">{browserName}</p>
             <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center">
-                <div className={`h-full ${barBgClass} rounded-lg`} style={{ width: barWidth }}></div>
+                <div className={`h-full ${getBarBgClass(browserName, isSafariNA)} rounded-lg`} style={{ width: barWidth }}></div>
             </div>
             <div className="flex items-baseline mt-3">
                 <span className="font-bold text-3xl text-gray-900 mr-1">
@@ -327,9 +312,6 @@ const App = () => {
         <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter">
             {/* This hidden div is a workaround for Tailwind CSS CDN's JIT mode.
                 When using Tailwind via CDN, the JIT compiler scans your HTML/JSX to find classes.
-                If classes are constructed dynamically (e.g., `bg-${colorVariable}`),
-                the JIT compiler might not detect them during its initial scan,
-                leading to missing styles in the deployed application.
                 By explicitly listing all possible dynamic class combinations here,
                 we "force" the JIT compiler to include these styles in the generated CSS.
                 For a production environment, a full Tailwind build process (using PostCSS)
