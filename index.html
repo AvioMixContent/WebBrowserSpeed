@@ -148,52 +148,34 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
 
     // Determine classes based on browserName and isSafariNA
     // Explicitly define full class strings for Tailwind to pick up reliably
-    let barBgClass = '';
-    let borderClass = '';
-    let scoreTextClass = 'text-gray-600'; // Default for points
-
-    if (isSafariNA) {
-        barBgClass = 'bg-gray-400';
-        borderClass = 'border-gray-300';
-        scoreTextClass = 'text-gray-600'; // For "Not available" text
-    } else {
-        switch (browserName) {
-            case 'edge':
-                barBgClass = 'bg-teal-500';
-                borderClass = 'border-teal-400';
-                break;
-            case 'chrome':
-                barBgClass = 'bg-yellow-400';
-                borderClass = 'border-yellow-300';
-                break;
-            case 'firefox':
-                barBgClass = 'bg-orange-500';
-                borderClass = 'border-orange-400';
-                break;
-            case 'brave':
-                barBgClass = 'bg-amber-500';
-                borderClass = 'border-amber-400';
-                break;
-            case 'opera':
-                barBgClass = 'bg-red-500';
-                borderClass = 'border-red-400';
-                break;
-            case 'safari': // This case is for when Safari *does* have a score > 0
-                barBgClass = 'bg-blue-500';
-                borderClass = 'border-blue-400';
-                break;
-            default:
-                // Fallback or error case
-                barBgClass = 'bg-gray-500';
-                borderClass = 'border-gray-400';
-                break;
+    // This approach ensures Tailwind's JIT compiler (when using CDN)
+    // can reliably detect and include all necessary classes.
+    const getClassesForBrowser = (name, isNA) => {
+        let barBg = '';
+        let border = '';
+        if (isNA) {
+            barBg = 'bg-gray-400';
+            border = 'border-gray-300';
+        } else {
+            switch (name) {
+                case 'edge': barBg = 'bg-teal-500'; border = 'border-teal-400'; break;
+                case 'chrome': barBg = 'bg-yellow-400'; border = 'border-yellow-300'; break;
+                case 'firefox': barBg = 'bg-orange-500'; border = 'border-orange-400'; break;
+                case 'brave': barBg = 'bg-amber-500'; border = 'border-amber-400'; break;
+                case 'opera': barBg = 'bg-red-500'; border = 'border-red-400'; break;
+                case 'safari': barBg = 'bg-blue-500'; border = 'border-blue-400'; break;
+                default: barBg = 'bg-gray-500'; border = 'border-gray-400'; break;
+            }
         }
-    }
+        return { barBg, border };
+    };
+
+    const { barBg, border } = getClassesForBrowser(browserName, isSafariNA);
 
     return (
         <div className={`
             bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2
-            ${borderClass}
+            ${border}
             hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out
         `} data-browser={browserName}>
             <img
@@ -205,13 +187,13 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
             />
             <p className="font-semibold text-xl text-gray-800 mb-2 capitalize">{browserName}</p>
             <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center">
-                <div className={`h-full ${barBgClass} rounded-lg`} style={{ width: barWidth }}></div>
+                <div className={`h-full ${barBg} rounded-lg`} style={{ width: barWidth }}></div>
             </div>
             <div className="flex items-baseline mt-3">
                 <span className="font-bold text-3xl text-gray-900 mr-1">
                     {score.toFixed(1)}
                 </span>
-                <span className={`text-base ${scoreTextClass}`}>
+                <span className={`text-base ${isSafariNA ? 'text-gray-600' : 'text-gray-600'}`}>
                     {isSafariNA ? '(Not available / Not tested)' : 'points'}
                 </span>
             </div>
