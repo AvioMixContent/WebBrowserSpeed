@@ -145,55 +145,61 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div class="browser-card border-edge">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="browser-cards-container">
+            <div class="browser-card border-edge" data-browser="edge">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/48px-Microsoft_Edge_logo_%282019%29.svg.png" alt="Edge browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Edge';" loading="lazy"/>
-                <p class="font-semibold text-xl text-gray-700 mb-2">Edge</p> <div class="browser-bar-vertical-container">
+                <p class="font-semibold text-xl text-gray-700 mb-2">Edge</p>
+                <div class="browser-bar-vertical-container">
                     <div class="browser-bar-vertical edge"></div>
                 </div>
                 <span class="font-bold text-2xl text-gray-800"></span>
                 <span class="text-sm text-gray-500">points</span>
             </div>
 
-            <div class="browser-card border-chrome">
+            <div class="browser-card border-chrome" data-browser="chrome">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/48px-Google_Chrome_icon_%28September_2014%29.svg.png" alt="Chrome browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Chrome';" loading="lazy"/>
-                <p class="font-semibold text-xl text-gray-700 mb-2">Chrome</p> <div class="browser-bar-vertical-container">
+                <p class="font-semibold text-xl text-gray-700 mb-2">Chrome</p>
+                <div class="browser-bar-vertical-container">
                     <div class="browser-bar-vertical chrome"></div>
                 </div>
                 <span class="font-bold text-2xl text-gray-800"></span>
                 <span class="text-sm text-gray-500">points</span>
             </div>
 
-            <div class="browser-card border-brave">
+            <div class="browser-card border-brave" data-browser="brave">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" alt="Brave browser logo" class="w-auto h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Brave';" loading="lazy"/>
-                <p class="font-semibold text-xl text-gray-700 mb-2">Brave</p> <div class="browser-bar-vertical-container">
+                <p class="font-semibold text-xl text-gray-700 mb-2">Brave</p>
+                <div class="browser-bar-vertical-container">
                     <div class="browser-bar-vertical brave"></div>
                 </div>
                 <span class="font-bold text-2xl text-gray-800"></span>
                 <span class="text-sm text-gray-500">points</span>
             </div>
 
-            <div class="browser-card border-opera">
+            <div class="browser-card border-opera" data-browser="opera">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Opera_2015_icon.svg/48px-Opera_2015_icon.svg.png" alt="Opera browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Opera';" loading="lazy"/>
-                <p class="font-semibold text-xl text-gray-700 mb-2">Opera</p> <div class="browser-bar-vertical-container">
+                <p class="font-semibold text-xl text-gray-700 mb-2">Opera</p>
+                <div class="browser-bar-vertical-container">
                     <div class="browser-bar-vertical opera"></div>
                 </div>
                 <span class="font-bold text-2xl text-gray-800"></span>
                 <span class="text-sm text-gray-500">points</span>
             </div>
 
-            <div class="browser-card border-firefox">
+            <div class="browser-card border-firefox" data-browser="firefox">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/48px-Firefox_logo%2C_2019.svg.png" alt="Firefox browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Firefox';" loading="lazy"/>
-                <p class="font-semibold text-xl text-gray-700 mb-2">Firefox</p> <div class="browser-bar-vertical-container">
+                <p class="font-semibold text-xl text-gray-700 mb-2">Firefox</p>
+                <div class="browser-bar-vertical-container">
                     <div class="browser-bar-vertical firefox"></div>
                 </div>
                 <span class="font-bold text-2xl text-gray-800"></span>
                 <span class="text-sm text-gray-500">points</span>
             </div>
 
-            <div class="browser-card border-safari-na">
+            <div class="browser-card border-safari-na" data-browser="safari">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Safari_browser_logo.svg/48px-Safari_browser_logo.svg.png" alt="Safari browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Safari';" loading="lazy"/>
-                <p class="font-semibold text-xl text-gray-700 mb-2">Safari</p> <div class="browser-bar-vertical-container">
+                <p class="font-semibold text-xl text-gray-700 mb-2">Safari</p>
+                <div class="browser-bar-vertical-container">
                     <div class="browser-bar-vertical safari-na"></div>
                 </div>
                 <span class="font-bold text-2xl text-gray-800"></span>
@@ -222,10 +228,10 @@
                 safari: 0.0
             },
             'config2': { // 7800X3D, RTX 4080 Super, 32 GB RAM DDR5 6000 MHz @ CL 28
-                edge: 34.1,
+                edge: 34.9,
                 chrome: 34.8,
                 firefox: 28.5,
-                brave: 34.9,
+                brave: 34.1,
                 opera: 33.5,
                 safari: 0.0
             },
@@ -239,69 +245,79 @@
             },
             'config4': { // i7 10750H, RTX 2070 Super laptop, 16 GB DDR5 2666 MHz
                 edge: 19.0,
-                chrome: 18.5,
+                chrome: 18.7,
                 firefox: 15.5,
-                brave: 18.7,
+                brave: 18.5,
                 opera: 17.8,
                 safari: 0.0
             }
         };
 
+        // Cache frequently accessed DOM elements
+        let navButtons;
+        let browserCardsContainer;
+        let browserCardElements; // Array of the actual browser card DOM elements
+
         /**
-         * Updates the displayed browser speeds based on the provided data.
+         * Updates the displayed browser speeds based on the provided data and sorts the cards.
          * @param {object} data - An object containing scores for each browser.
          */
         function updateBrowserSpeeds(data) {
             const maxScore = 50; // Maximum score for scaling the bars
 
-            // Update Edge browser data
-            document.querySelector('.browser-bar-vertical.edge').style.height = `calc((${data.edge} / ${maxScore}) * 100%)`;
-            document.querySelector('.browser-card.border-edge span:first-of-type').textContent = data.edge.toFixed(1);
+            // Create an array of objects with browser data and their corresponding DOM elements
+            const browsersWithScores = browserCardElements.map(card => {
+                const browserName = card.getAttribute('data-browser');
+                const score = data[browserName];
+                return { name: browserName, score: score, element: card };
+            });
 
-            // Update Chrome browser data
-            document.querySelector('.browser-bar-vertical.chrome').style.height = `calc((${data.chrome} / ${maxScore}) * 100%)`;
-            document.querySelector('.browser-card.border-chrome span:first-of-type').textContent = data.chrome.toFixed(1);
+            // Sort the browsers by score in descending order
+            browsersWithScores.sort((a, b) => b.score - a.score);
 
-            // Update Firefox browser data
-            document.querySelector('.browser-bar-vertical.firefox').style.height = `calc((${data.firefox} / ${maxScore}) * 100%)`;
-            document.querySelector('.browser-card.border-firefox span:first-of-type').textContent = data.firefox.toFixed(1);
+            // Reorder existing DOM nodes based on sorted data
+            browsersWithScores.forEach(browser => {
+                const card = browser.element;
+                const browserName = browser.name;
+                const score = browser.score;
 
-            // Update Brave browser data
-            document.querySelector('.browser-bar-vertical.brave').style.height = `calc((${data.brave} / ${maxScore}) * 100%)`;
-            document.querySelector('.browser-card.border-brave span:first-of-type').textContent = data.brave.toFixed(1);
-
-            // Update Opera browser data
-            document.querySelector('.browser-bar-vertical.opera').style.height = `calc((${data.opera} / ${maxScore}) * 100%)`;
-            document.querySelector('.browser-card.border-opera span:first-of-type').textContent = data.opera.toFixed(1);
-
-            // Select Safari elements robustly to avoid errors if classes change
-            const safariBar = document.querySelector('.browser-card.border-safari-na .browser-bar-vertical.safari-na') || document.querySelector('.browser-card.border-safari .browser-bar-vertical.safari');
-            const safariCard = document.querySelector('.browser-card.border-safari-na') || document.querySelector('.browser-card.border-safari');
-            const safariScoreSpan = safariCard ? safariCard.querySelector('span:first-of-type') : null;
-            const safariTextSpan = safariCard ? safariCard.querySelector('span:last-of-type') : null;
-
-            // Update Safari browser data based on availability
-            if (safariBar && safariScoreSpan && safariTextSpan && safariCard) {
-                if (data.safari > 0) {
-                    safariBar.classList.remove('safari-na');
-                    safariBar.classList.add('safari');
-                    safariBar.style.height = `calc((${data.safari} / ${maxScore}) * 100%)`;
-                    safariScoreSpan.textContent = data.safari.toFixed(1);
-                    safariTextSpan.textContent = 'points';
-                    safariCard.classList.remove('border-safari-na');
-                    safariCard.classList.add('border-safari');
-                } else {
-                    safariBar.classList.remove('safari');
-                    safariBar.classList.add('safari-na');
-                    safariBar.style.height = `calc((${data.safari} / ${maxScore}) * 100%)`;
-                    safariScoreSpan.textContent = data.safari.toFixed(1);
-                    safariTextSpan.textContent = '(Not available / Not tested)';
-                    safariCard.classList.remove('border-safari');
-                    safariCard.classList.add('border-safari-na');
+                // Update bar height
+                const bar = card.querySelector(`.browser-bar-vertical.${browserName}, .browser-bar-vertical.safari-na`);
+                if (bar) {
+                    bar.style.height = `calc((${score} / ${maxScore}) * 100%)`;
                 }
-            } else {
-                console.error("One or more Safari elements not found for update.");
-            }
+
+                // Update score text
+                const scoreSpan = card.querySelector('span:first-of-type');
+                if (scoreSpan) {
+                    scoreSpan.textContent = score.toFixed(1);
+                }
+
+                // Handle Safari specific styling and text
+                const textSpan = card.querySelector('span:last-of-type');
+                if (browserName === 'safari') {
+                    if (score > 0) {
+                        if (bar) {
+                            bar.classList.remove('safari-na');
+                            bar.classList.add('safari');
+                        }
+                        card.classList.remove('border-safari-na');
+                        card.classList.add('border-safari');
+                        if (textSpan) textSpan.textContent = 'points';
+                    } else {
+                        if (bar) {
+                            bar.classList.remove('safari');
+                            bar.classList.add('safari-na');
+                        }
+                        card.classList.remove('border-safari');
+                        card.classList.add('border-safari-na');
+                        if (textSpan) textSpan.textContent = '(Not available / Not tested)';
+                    }
+                }
+
+                // Append the card to reorder it in the DOM. This is efficient as it's moving existing nodes.
+                browserCardsContainer.appendChild(card);
+            });
         }
 
         /**
@@ -312,7 +328,7 @@
             console.log("Selected PC configuration:", configKey);
 
             // Reset all buttons to their default (non-active) state and apply correct border colors
-            document.querySelectorAll('nav button').forEach(button => {
+            navButtons.forEach(button => { // Use cached navButtons
                 button.classList.remove('bg-blue-500', 'bg-green-500', 'text-white'); // Remove active styles and fill colors
                 button.classList.add('bg-white', 'text-gray-800'); // Apply default text/background
 
@@ -329,7 +345,7 @@
             });
 
             // Apply active styles to the clicked button
-            const selectedButton = document.querySelector(`button[onclick="selectConfiguration('${configKey}')"]`);
+            const selectedButton = Array.from(navButtons).find(button => button.getAttribute('onclick').includes(configKey)); // Use cached navButtons
             if (selectedButton) {
                 selectedButton.classList.remove('bg-white', 'text-gray-800'); // Remove default text/background
                 selectedButton.classList.add('text-white'); // Apply active text color
@@ -350,8 +366,13 @@
 
         // Initial setup on page load
         document.addEventListener('DOMContentLoaded', () => {
+            // Cache DOM elements on load
+            navButtons = document.querySelectorAll('nav button');
+            browserCardsContainer = document.getElementById('browser-cards-container');
+            browserCardElements = Array.from(browserCardsContainer.children);
+
             // Apply correct borders and initial state to all buttons
-            document.querySelectorAll('nav button').forEach(button => {
+            navButtons.forEach(button => { // Use cached navButtons
                 button.classList.add('border-4'); // Make borders bold
                 const buttonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
                 if (buttonConfigKey === 'config2') {
@@ -362,7 +383,7 @@
             });
 
             // Then simulate click on the first button to set its active state
-            const firstButton = document.querySelector('nav button');
+            const firstButton = navButtons[0]; // Use cached navButtons
             if (firstButton) {
                 const onclickAttr = firstButton.getAttribute('onclick');
                 const configKeyMatch = onclickAttr.match(/'([^']+)'/);
