@@ -1,325 +1,394 @@
-import React, { useState, useEffect, useCallback, memo } from 'react'; // Import memo
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Browser Speed – Speedometer 3.1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* White background */
+        }
+        /* Styling for individual browser cards */
+        .browser-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* More rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            padding: 1rem; /* Reduced padding for lower height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-width: 2px; /* Add border width */
+            transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+        }
+        /* Hover effect for browser cards */
+        .browser-card:hover {
+            transform: scale(1.03); /* Slight enlargement on hover */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
+        }
+        /* Container for horizontal browser performance bars */
+        .browser-bar-horizontal-container {
+            width: 100%; /* Takes full width of the card */
+            height: 30px; /* Fixed height for the horizontal bar */
+            background-color: #e2e8f0; /* Lighter gray for bar background */
+            border-radius: 0.5rem; /* Rounded corners for bar container */
+            overflow: hidden;
+            display: flex;
+            align-items: center; /* Align content vertically within the bar */
+            /* margin-top: 0.75rem; Removed as score is now below */
+        }
+        /* Styling for the horizontal browser performance bars */
+        .browser-bar-horizontal {
+            height: 100%; /* Takes full height of its container */
+            width: 0%; /* Initial width, will be set by JS */
+            background-color: #6366f1; /* Default color, overridden by specific browser classes */
+            border-radius: 0.5rem; /* Rounded corners for the bar itself */
+            transition: width 0.7s ease-out; /* Smooth transition for width changes */
+        }
+        /* Colors corresponding to browser logos for bars */
+        .browser-bar-horizontal.edge { background-color: #00A3A3; } /* Teal for Edge */
+        .browser-bar-horizontal.chrome { background-color: #facc15; } /* Yellow from Chrome logo */
+        .browser-bar-horizontal.firefox { background-color: #f97316; } /* Orange from Firefox logo */
+        .browser-bar-horizontal.brave { background-color: #f59e0b; } /* Amber/Orange from Brave logo */
+        .browser-bar-horizontal.opera { background-color: #ef4444; } /* Red from Opera logo */
+        .browser-bar-horizontal.safari { background-color: #3b82f6; } /* Blue for Safari logo (used if score available) */
+        .browser-bar-horizontal.safari-na { background-color: #94a3b8; } /* Gray for Safari (Not available) */
 
-// Data for each PC configuration, including browser performance scores
-// Defined outside components to prevent re-creation on every render
-const configurations = {
-    'config1': { // i7 13980HX, RTX 4090 laptop, 32 GB DDR5 4800 MHz
-        edge: 35.5,
-        chrome: 35.2,
-        firefox: 26.0,
-        brave: 33.6,
-        opera: 32.2,
-        safari: 0.0
-    },
-    'config2': { // 7800X3D, RTX 4080 Super, 32 GB RAM DDR5 6000 MHz @ CL 28
-        edge: 34.9,
-        chrome: 34.8,
-        firefox: 28.5,
-        brave: 34.1,
-        opera: 33.5,
-        safari: 0.0
-    },
-    'config3': { // i5 10400, 16 GB DDR5 2666 MHz
-        edge: 18.3,
-        chrome: 17.3,
-        firefox: 14.9,
-        brave: 17.1,
-        opera: 16.2,
-        safari: 0.0
-    },
-    'config4': { // i7 10750H, RTX 2070 Super laptop, 16 GB DDR5 2666 MHz
-        edge: 19.0,
-        chrome: 18.7,
-        firefox: 15.5,
-        brave: 18.5,
-        opera: 17.8,
-        safari: 0.0
-    }
-};
+        /* Border colors of tiles according to graphs */
+        .browser-card.border-edge { border-color: #00A3A3; }
+        .browser-card.border-chrome { border-color: #facc15; }
+        .browser-card.border-firefox { border-color: #f97316; }
+        .browser-card.border-brave { border-color: #f59e0b; }
+        .browser-card.border-opera { border-color: #ef4444; }
+        .browser-card.border-safari-na { border-color: #94a3b8; }
+        .browser-card.border-safari { border-color: #3b82f6; } /* Added Safari border color */
 
-// Browser logo URLs
-// Defined outside components for performance
-const browserLogos = {
-    edge: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/48px-Microsoft_Edge_logo_%282019%29.svg.png',
-    chrome: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/48px-Google_Chrome_icon_%28September_2014%29.svg.png',
-    brave: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png',
-    opera: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Opera_2015_icon.svg/48px-Opera_2015_icon.svg.png',
-    firefox: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/48px-Firefox_logo%2C_2019.svg.png',
-    safari: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Safari_browser_logo.svg/48px-Safari_browser_logo.svg.png',
-};
+        /* Gradient for heading text - changed to left to right */
+        .text-gradient {
+            background-image: linear-gradient(to right, #22c55e, #facc15, #f97316, #ef4444);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen">
 
-
-// Header Component: Displays contact and social media links
-// Memoized as its props are static
-const Header = memo(() => (
-    <header className="w-full max-w-5xl mx-auto bg-gray-900 h-8 flex items-center justify-end px-4 shadow-lg rounded-b-xl">
-        <div className="flex items-center space-x-2">
-            <a href="mailto:info@example.com" className="text-gray-300 flex items-center hover:text-white transition-colors duration-200 text-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail mr-1"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                info@example.2025.com
+    <header class="w-full max-w-5xl mx-auto bg-black h-8 flex items-center justify-end px-4 shadow-lg rounded-b-xl">
+        <div class="flex items-center space-x-2">
+            <a href="mailto:info@example.com" class="text-white flex items-center hover:text-gray-300 transition-colors text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail mr-1"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                info@example.com
             </a>
-            <a href="https://www.facebook.com/yourpage" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            <a href="https://www.facebook.com/yourpage" target="_blank" class="text-white hover:text-gray-300 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
-            <a href="https://www.instagram.com/yourprofile" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            <a href="https://www.instagram.com/yourprofile" target="_blank" class="text-white hover:text-gray-300 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
             </a>
         </div>
     </header>
-));
 
-// Page Header Component: Displays the Speedometer title and logo
-// Memoized as its props are static
-const PageHeader = memo(() => (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8">
-        <div className="flex items-center mb-4 sm:mb-0">
-            {/* SVG for the gauge logo with a linear gradient effect */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="url(#logo-gradient)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-gauge mr-6">
-                <defs>
-                    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#22c55e" stopOpacity="1" />
-                        <stop offset="33%" stopColor="#facc15" stopOpacity="1" />
-                        <stop offset="66%" stopColor="#f97316" stopOpacity="1" />
-                        <stop offset="100%" stopColor="#ef4444" stopOpacity="1" />
-                    </linearGradient>
-                </defs>
-                <path d="m12 14 4-4"/>
-                <path d="M3.34 19.06a10 10 0 1 1 17.32 0"/>
-            </svg>
-            <div className="flex flex-col items-start">
-                {/* Changed order and font sizes as per user request, using text-black */}
-                <h1 className="text-xl sm:text-2xl font-bold leading-tight text-black">Browsers Performance Overview</h1>
-                <h1 className="text-xs sm:text-sm font-bold leading-tight text-black">Speedometer 3.1</h1>
+    <div class="w-full max-w-5xl bg-white px-6 pt-6 pb-6 sm:px-8 sm:pb-8 md:px-10 md:pb-10 rounded-xl shadow-2xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8">
+            <div class="flex items-center mb-4 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="url(#logo-gradient)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gauge mr-6">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" /> <stop offset="33%" style="stop-color:#facc15;stop-opacity:1" /> <stop offset="66%" style="stop-color:#f97316;stop-opacity:1" /> <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" /> </linearGradient>
+                    </defs>
+                    <path d="m12 14 4-4"/>
+                    <path d="M3.34 19.06a10 10 0 1 1 17.32 0"/>
+                </svg>
+                <div class="flex flex-col items-start">
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight text-gradient">Speedometer 3.1</h1>
+                    <h1 class="text-xs sm:text-sm font-bold leading-tight text-gray-800">Browsers Performance Overview</h1>
+                </div>
             </div>
         </div>
-    </div>
-));
 
-// Navigation Component: Allows selecting different PC configurations
-// Memoized to prevent re-renders unless selectedConfig or onSelectConfig changes
-const Navigation = memo(({ selectedConfig, onSelectConfig }) => (
-    <nav className="w-full mb-6 sm:mb-8">
-        <ul className="flex flex-wrap justify-center gap-2">
-            {Object.keys(configurations).map((configKey) => (
-                <li key={configKey} className="flex-1 min-w-0">
-                    <button
-                        className={`w-full px-2 py-2 rounded-lg text-xs font-semibold border-2 transition-all duration-300 ease-in-out shadow-sm text-center
-                            ${selectedConfig === configKey
-                                ? (configKey === 'config2' ? 'bg-green-600 border-green-600 text-white shadow-md' : 'bg-blue-600 border-blue-600 text-white shadow-md')
-                                : (configKey === 'config2' ? 'bg-white border-green-300 text-gray-700 hover:bg-green-50 hover:border-green-400' : 'bg-white border-blue-300 text-gray-700 hover:bg-blue-50 hover:border-blue-400')
-                            }
-                            focus:outline-none focus:ring-2 focus:ring-offset-2
-                            ${configKey === 'config2' ? 'focus:ring-green-500' : 'focus:ring-blue-500'}
-                            active:scale-98
-                        `}
-                        onClick={() => onSelectConfig(configKey)}
-                    >
-                        {configKey === 'config1' && (<>i7 13980HX<br/>RTX 4090 laptop<br/>32 GB DDR5 4800 MHz</>)}
-                        {configKey === 'config2' && (<>7800X3D<br/>RTX 4080 Super<br/>32 GB DDR5 6000 MHz CL 28</>)}
-                        {configKey === 'config3' && (<>i5 10400<br/>-<br/>16 GB DDR5 2666 MHz</>)}
-                        {configKey === 'config4' && (<>i7 10750H<br/>RTX 2070 Super laptop<br/>16 GB DDR5 2666 MHz</>)}
-                    </button>
+        <nav class="w-full mb-6 sm:mb-8">
+            <ul class="flex flex-wrap justify-center gap-2">
+                <li class="flex-1 min-w-0">
+                    <button class="w-full px-2 py-2 rounded-lg bg-white text-gray-800 text-xs font-semibold border-4 transition-all duration-300 ease-in-out shadow-sm text-center hover:scale-105 hover:shadow-xl" onclick="selectConfiguration('config1')">i7 13980HX<br>RTX 4090 laptop<br>32 GB DDR5 4800 MHz</button>
                 </li>
-            ))}
-        </ul>
-    </nav>
-));
-
-// Hero Section Component: Displays a promotional banner
-// Memoized as its props are static
-const HeroSection = memo(() => (
-    <div className="relative w-full h-40 rounded-xl overflow-hidden shadow-xl mb-8">
-        <img src="https://placehold.co/800x160/333333/FFFFFF?text=Optimize+your+online+experience" alt="Abstract speed background" className="absolute inset-0 w-full h-full object-cover filter brightness-75" loading="lazy"/>
-        <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-white bg-black bg-opacity-30">
-            <h2 className="text-3xl font-extrabold mb-2 drop-shadow-lg">Discover which browser is the fastest!</h2>
-            <p className="text-lg text-gray-100 drop-shadow-md">Our tests reveal real performance.</p>
+                <li class="flex-1 min-w-0">
+                    <button class="w-full px-2 py-2 rounded-lg bg-white text-gray-800 text-xs font-semibold border-4 transition-all duration-300 ease-in-out shadow-sm text-center hover:scale-105 hover:shadow-xl" onclick="selectConfiguration('config2')">7800X3D<br>RTX 4080 Super<br>32 GB DDR5 6000 MHz CL 28</button>
+                </li>
+                <li class="flex-1 min-w-0">
+                    <button class="w-full px-2 py-2 rounded-lg bg-white text-gray-800 text-xs font-semibold border-4 transition-all duration-300 ease-in-out shadow-sm text-center hover:scale-105 hover:shadow-xl" onclick="selectConfiguration('config3')">i5 10400<br>-<br>16 GB DDR5 2666 MHz</button>
+                </li>
+                <li class="flex-1 min-w-0">
+                    <button class="w-full px-2 py-2 rounded-lg bg-white text-gray-800 text-xs font-semibold border-4 transition-all duration-300 ease-in-out shadow-sm text-center hover:scale-105 hover:shadow-xl" onclick="selectConfiguration('config4')">i7 10750H<br>RTX 2070 Super laptop<br>16 GB DDR5 2666 MHz</button>
+                </li>
+            </ul>
+        </nav>
+        <div class="relative w-full h-40 rounded-xl overflow-hidden shadow-lg mb-8">
+            <img src="https://placehold.co/800x160/333333/FFFFFF?text=Optimize+your+online+experience" alt="Abstract speed background" class="absolute inset-0 w-full h-full object-cover filter brightness-75" loading="lazy">
+            <div class="relative z-10 flex flex-col items-center justify-center h-full p-4 text-white">
+                <h2 class="text-3xl font-bold mb-2 drop-shadow-md">Discover which browser is the fastest!</h2>
+                <p class="text-lg text-gray-100 drop-shadow-sm">Our tests reveal real performance.</p>
+            </div>
         </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="browser-cards-container">
+            <div class="browser-card border-edge" data-browser="edge">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/48px-Microsoft_Edge_logo_%282019%29.svg.png" alt="Edge browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Edge';" loading="lazy"/>
+                <p class="font-semibold text-xl text-gray-700 mb-2">Edge</p>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal edge"></div>
+                </div>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
+            </div>
+
+            <div class="browser-card border-chrome" data-browser="chrome">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/48px-Google_Chrome_icon_%28September_2014%29.svg.png" alt="Chrome browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Chrome';" loading="lazy"/>
+                <p class="font-semibold text-xl text-gray-700 mb-2">Chrome</p>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal chrome"></div>
+                </div>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
+            </div>
+
+            <div class="browser-card border-brave" data-browser="brave">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" alt="Brave browser logo" class="w-auto h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Brave';" loading="lazy"/>
+                <p class="font-semibold text-xl text-gray-700 mb-2">Brave</p>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal brave"></div>
+                </div>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
+            </div>
+
+            <div class="browser-card border-opera" data-browser="opera">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Opera_2015_icon.svg/48px-Opera_2015_icon.svg.png" alt="Opera browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Opera';" loading="lazy"/>
+                <p class="font-semibold text-xl text-gray-700 mb-2">Opera</p>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal opera"></div>
+                </div>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
+            </div>
+
+            <div class="browser-card border-firefox" data-browser="firefox">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/48px-Firefox_logo%2C_2019.svg.png" alt="Firefox browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Firefox';" loading="lazy"/>
+                <p class="font-semibold text-xl text-gray-700 mb-2">Firefox</p>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal firefox"></div>
+                </div>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
+            </div>
+
+            <div class="browser-card border-safari-na" data-browser="safari">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Safari_browser_logo.svg/48px-Safari_browser_logo.svg.png" alt="Safari browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Safari';" loading="lazy"/>
+                <p class="font-semibold text-xl text-gray-700 mb-2">Safari</p>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal safari-na"></div>
+                </div>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">(Not available / Not tested)</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-center text-gray-500 text-sm mt-10">
+            Tested on 26.5.2025. Browser versions are always the latest as of the testing date.
+        </p>
     </div>
-));
 
-// Browser Card Component: Displays individual browser performance
-// Memoized to prevent re-renders unless its specific props (browserName, score, maxScore) change
-const BrowserCard = memo(({ browserName, score, maxScore }) => {
-    const isSafariNA = browserName === 'safari' && score === 0;
-    const barWidth = `calc((${score} / ${maxScore}) * 100%)`;
-
-    return (
-        <div className={`
-            bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2
-            ${isSafariNA ? 'border-gray-300' : ''}
-            ${!isSafariNA && browserName === 'edge' ? 'border-teal-400' : ''}
-            ${!isSafariNA && browserName === 'chrome' ? 'border-yellow-300' : ''}
-            ${!isSafariNA && browserName === 'firefox' ? 'border-orange-400' : ''}
-            ${!isSafariNA && browserName === 'brave' ? 'border-amber-400' : ''}
-            ${!isSafariNA && browserName === 'opera' ? 'border-red-400' : ''}
-            ${!isSafariNA && browserName === 'safari' ? 'border-blue-400' : ''}
-            hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out
-        `} data-browser={browserName}>
-            <img
-                src={browserLogos[browserName]}
-                alt={`${browserName} browser logo`}
-                className="w-14 h-14 mb-3"
-                onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/56x56/cccccc/000000?text=${browserName}`; }}
-                loading="lazy"
-            />
-            <p className="font-semibold text-xl text-gray-800 mb-2 capitalize">{browserName}</p>
-            <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center">
-                <div className={`h-full rounded-lg
-                    ${isSafariNA ? 'bg-gray-400' : ''}
-                    ${!isSafariNA && browserName === 'edge' ? 'bg-teal-500' : ''}
-                    ${!isSafariNA && browserName === 'chrome' ? 'bg-yellow-400' : ''}
-                    ${!isSafariNA && browserName === 'firefox' ? 'bg-orange-500' : ''}
-                    ${!isSafariNA && browserName === 'brave' ? 'bg-amber-500' : ''}
-                    ${!isSafariNA && browserName === 'opera' ? 'bg-red-500' : ''}
-                    ${!isSafariNA && browserName === 'safari' ? 'bg-blue-500' : ''}
-                `} style={{ width: barWidth }}></div>
-            </div>
-            <div className="flex items-baseline mt-3">
-                <span className="font-bold text-3xl text-gray-900 mr-1">
-                    {score.toFixed(1)}
-                </span>
-                <span className={`text-base ${isSafariNA ? 'text-gray-600' : 'text-gray-600'}`}>
-                    {isSafariNA ? '(Not available / Not tested)' : 'points'}
-                </span>
-            </div>
-        </div>
-    );
-});
-
-// Main Content Wrapper Component: Contains the page header, navigation, hero, and browser cards
-const MainContent = ({ selectedConfig, onSelectConfig }) => {
-    const [browserScores, setBrowserScores] = useState([]);
-    const maxScore = 50; // Maximum score for scaling the bars
-
-    // Effect to update browser scores when the selected configuration changes
-    useEffect(() => {
-        if (configurations[selectedConfig]) {
-            // Convert scores object to an array of objects for sorting
-            const currentScores = Object.entries(configurations[selectedConfig]).map(([name, score]) => ({
-                name,
-                score
-            }));
-            // Sort by score in descending order
-            currentScores.sort((a, b) => b.score - a.score);
-            setBrowserScores(currentScores);
-        }
-    }, [selectedConfig]); // Dependency array includes selectedConfig
-
-    return (
-        <div className="w-full max-w-5xl bg-white px-6 pt-6 pb-6 sm:px-8 sm:pb-8 md:px-10 md:pb-10 rounded-xl shadow-2xl">
-            <PageHeader />
-            <Navigation selectedConfig={selectedConfig} onSelectConfig={onSelectConfig} />
-            <HeroSection />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="browser-cards-container">
-                {browserScores.map((browser) => (
-                    <BrowserCard
-                        key={browser.name}
-                        browserName={browser.name}
-                        score={browser.score}
-                        maxScore={maxScore}
-                    />
-                ))}
-            </div>
-
-            <p className="text-center text-gray-500 text-sm mt-10">
-                Tested on 26.5.2025. Browser versions are always the latest as of the testing date.
-            </p>
-        </div>
-    );
-};
-
-// Footer Component: Displays copyright information
-// Memoized as its props are static
-const Footer = memo(() => (
-    <footer className="w-full max-w-5xl mx-auto bg-gray-900 text-white text-center py-4 shadow-lg rounded-t-xl">
-        <p className="text-sm">&copy; 2025 Web Browser Speed. All rights reserved.</p>
+    <footer class="w-full max-w-5xl mx-auto bg-black text-white text-center py-4 shadow-lg rounded-t-xl">
+        <p class="text-sm">&copy; 2025 Web Browser Speed. All rights reserved.</p>
     </footer>
-));
 
-// Main App Component: Orchestrates all other components
-const App = () => {
-    // State to manage the currently selected PC configuration
-    const [selectedConfig, setSelectedConfig] = useState('config1');
+    <script>
+        // Data for each PC configuration, including browser performance scores
+        const configurations = {
+            'config1': { // i7 13980HX, RTX 4090 laptop, 32 GB DDR5 4800 MHz
+                edge: 35.5,
+                chrome: 35.2,
+                firefox: 26.0,
+                brave: 33.6,
+                opera: 32.2,
+                safari: 0.0
+            },
+            'config2': { // 7800X3D, RTX 4080 Super, 32 GB RAM DDR5 6000 MHz @ CL 28
+                edge: 34.9,
+                chrome: 34.8,
+                firefox: 28.5,
+                brave: 34.1,
+                opera: 33.5,
+                safari: 0.0
+            },
+            'config3': { // i5 10400, 16 GB DDR5 2666 MHz
+                edge: 18.3,
+                chrome: 17.3,
+                firefox: 14.9,
+                brave: 17.1,
+                opera: 16.2,
+                safari: 0.0
+            },
+            'config4': { // i7 10750H, RTX 2070 Super laptop, 16 GB DDR5 2666 MHz
+                edge: 19.0,
+                chrome: 18.7,
+                firefox: 15.5,
+                brave: 18.5,
+                opera: 17.8,
+                safari: 0.0
+            }
+        };
 
-    // Callback function to update the selected configuration
-    // Memoized with useCallback to prevent unnecessary re-renders of Navigation
-    const handleSelectConfiguration = useCallback((configKey) => {
-        setSelectedConfig(configKey);
-    }, []); // Empty dependency array ensures this function is stable across renders
+        // Cache frequently accessed DOM elements
+        let navButtons;
+        let browserCardsContainer;
+        let browserCardElements; // Array of the actual browser card DOM elements
 
-    return (
-        <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter">
-            {/* This hidden div explicitly lists all Tailwind CSS classes used in the application.
-                This is a workaround for Tailwind CSS CDN's JIT mode, which might fail to detect
-                dynamically constructed class names in JavaScript. By listing them here,
-                we "force" the JIT compiler to include these styles in the generated CSS,
-                ensuring proper rendering on static hosting environments like GitHub Pages.
-                For a production environment, a full Tailwind build process (using PostCSS)
-                is generally recommended over the CDN for better reliability and optimization.
-            */}
-            <div className="hidden">
-                {/* Header classes */}
-                <div className="w-full max-w-5xl mx-auto bg-gray-900 h-8 flex items-center justify-end px-4 shadow-lg rounded-b-xl"></div>
-                <div className="text-gray-300 flex items-center hover:text-white transition-colors duration-200 text-xs"></div>
-                <div className="space-x-2"></div>
+        /**
+         * Updates the displayed browser speeds based on the provided data and sorts the cards.
+         * @param {object} data - An object containing scores for each browser.
+         */
+        function updateBrowserSpeeds(data) {
+            const maxScore = 50; // Maximum score for scaling the bars
 
-                {/* Page Header classes */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8"></div>
-                <div className="flex items-center mb-4 sm:mb-0"></div>
-                <div className="text-xl sm:text-2xl font-bold leading-tight text-black"></div>
-                <div className="text-xs sm:text-sm font-bold leading-tight text-black"></div>
+            // Create an array of objects with browser data and their corresponding DOM elements
+            const browsersWithScores = browserCardElements.map(card => {
+                const browserName = card.getAttribute('data-browser');
+                const score = data[browserName];
+                return { name: browserName, score: score, element: card };
+            });
 
-                {/* Navigation classes */}
-                <div className="w-full mb-6 sm:mb-8"></div>
-                <div className="flex flex-wrap justify-center gap-2"></div>
-                <div className="flex-1 min-w-0"></div>
-                <div className="w-full px-2 py-2 rounded-lg text-xs font-semibold border-2 transition-all duration-300 ease-in-out shadow-sm text-center"></div>
-                <div className="bg-green-600 border-green-600 text-white shadow-md"></div>
-                <div className="bg-blue-600 border-blue-600 text-white shadow-md"></div>
-                <div className="bg-white border-green-300 text-gray-700 hover:bg-green-50 hover:border-green-400"></div>
-                <div className="bg-white border-blue-300 text-gray-700 hover:bg-blue-50 hover:border-blue-400"></div>
-                <div className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-blue-500 active:scale-98"></div>
+            // Sort the browsers by score in descending order
+            browsersWithScores.sort((a, b) => b.score - a.score);
 
-                {/* Hero Section classes */}
-                <div className="relative w-full h-40 rounded-xl overflow-hidden shadow-xl mb-8"></div>
-                <div className="absolute inset-0 w-full h-full object-cover filter brightness-75"></div>
-                <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-white bg-black bg-opacity-30"></div>
-                <div className="text-3xl font-extrabold mb-2 drop-shadow-lg"></div>
-                <div className="text-lg text-gray-100 drop-shadow-md"></div>
+            // Reorder existing DOM nodes based on sorted data
+            browsersWithScores.forEach(browser => {
+                const card = browser.element;
+                const browserName = browser.name;
+                const score = browser.score;
 
-                {/* Browser Card classes */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="browser-cards-container"></div>
-                <div className="bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2 hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out"></div>
-                <div className="w-14 h-14 mb-3"></div>
-                <div className="font-semibold text-xl text-gray-800 mb-2 capitalize"></div>
-                <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center"></div>
-                <div className="h-full rounded-lg"></div>
-                <div className="font-bold text-3xl text-gray-900 mr-1"></div>
-                <div className="text-base text-gray-600"></div>
+                // Update bar width
+                const bar = card.querySelector(`.browser-bar-horizontal.${browserName}, .browser-bar-horizontal.safari-na`);
+                if (bar) {
+                    bar.style.width = `calc((${score} / ${maxScore}) * 100%)`;
+                }
 
-                {/* Specific Browser Card Colors (for dynamic application) */}
-                <div className="border-gray-300 bg-gray-400"></div> {/* Safari NA */}
-                <div className="border-teal-400 bg-teal-500"></div> {/* Edge */}
-                <div className="border-yellow-300 bg-yellow-400"></div> {/* Chrome */}
-                <div className="border-orange-400 bg-orange-500"></div> {/* Firefox */}
-                <div className="border-amber-400 bg-amber-500"></div> {/* Brave */}
-                <div className="border-red-400 bg-red-500"></div> {/* Opera */}
-                <div className="border-blue-400 bg-blue-500"></div> {/* Safari */}
-                <div className="border-gray-400 bg-gray-500"></div> {/* Fallback */}
+                // Update score text
+                // Select the span within the new flex container
+                const scoreSpan = card.querySelector('.flex.items-baseline span:first-of-type');
+                if (scoreSpan) {
+                    scoreSpan.textContent = score.toFixed(1);
+                }
 
-                {/* Footer classes */}
-                <div className="text-center text-gray-500 text-sm mt-10"></div>
-                <div className="w-full max-w-5xl mx-auto bg-gray-900 text-white text-center py-4 shadow-lg rounded-t-xl"></div>
+                // Handle Safari specific styling and text
+                const textSpan = card.querySelector('.flex.items-baseline span:last-of-type');
+                if (browserName === 'safari') {
+                    if (score > 0) {
+                        if (bar) {
+                            bar.classList.remove('safari-na');
+                            bar.classList.add('safari');
+                        }
+                        card.classList.remove('border-safari-na');
+                        card.classList.add('border-safari');
+                        if (textSpan) textSpan.textContent = 'points';
+                    } else {
+                        if (bar) {
+                            bar.classList.remove('safari');
+                            bar.classList.add('safari-na');
+                        }
+                        card.classList.remove('border-safari');
+                        card.classList.add('border-safari-na');
+                        if (textSpan) textSpan.textContent = '(Not available / Not tested)';
+                    }
+                }
 
-                {/* Root App classes */}
-                <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter"></div>
-            </div>
-            <Header />
-            <MainContent selectedConfig={selectedConfig} onSelectConfig={handleSelectConfiguration} />
-            <Footer />
-        </div>
-    );
-};
+                // Append the card to reorder it in the DOM. This is efficient as it's moving existing nodes.
+                browserCardsContainer.appendChild(card);
+            });
+        }
 
-export default App;
+        /**
+         * Handles the selection of a PC configuration and updates the UI accordingly.
+         * @param {string} configKey - The key of the selected configuration (e.g., 'config1').
+         */
+        function selectConfiguration(configKey) {
+            console.log("Selected PC configuration:", configKey);
+
+            // Reset all buttons to their default (non-active) state and apply correct border colors
+            navButtons.forEach(button => { // Use cached navButtons
+                button.classList.remove('bg-blue-500', 'bg-green-700', 'text-white'); // Remove active styles and fill colors
+                button.classList.add('bg-white', 'text-gray-800'); // Apply default text/background
+
+                // Remove any specific border colors
+                button.classList.remove('border-green-700', 'border-blue-500');
+
+                // Reapply the correct border color based on its configKey
+                const currentButtonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (currentButtonConfigKey === 'config2') {
+                    button.classList.add('border-green-700');
+                } else {
+                    button.classList.add('border-blue-500');
+                }
+            });
+
+            // Apply active styles to the clicked button
+            const selectedButton = Array.from(navButtons).find(button => button.getAttribute('onclick').includes(configKey)); // Use cached navButtons
+            if (selectedButton) {
+                selectedButton.classList.remove('bg-white', 'text-gray-800'); // Remove default text/background
+                selectedButton.classList.add('text-white'); // Apply active text color
+
+                // Apply fill color based on its configKey
+                if (configKey === 'config2') {
+                    selectedButton.classList.add('bg-green-700');
+                } else {
+                    selectedButton.classList.add('bg-blue-500');
+                }
+            }
+
+            // Update the browser speeds based on the selected configuration data
+            if (configurations[configKey]) {
+                updateBrowserSpeeds(configurations[configKey]);
+            }
+        }
+
+        // Initial setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cache DOM elements on load
+            navButtons = document.querySelectorAll('nav button');
+            browserCardsContainer = document.getElementById('browser-cards-container');
+            browserCardElements = Array.from(browserCardsContainer.children);
+
+            // Apply correct borders and initial state to all buttons
+            navButtons.forEach(button => { // Use cached navButtons
+                button.classList.add('border-4'); // Make borders bold
+                const buttonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (buttonConfigKey === 'config2') {
+                    button.classList.add('border-green-700');
+                } else {
+                    button.classList.add('border-blue-500');
+                }
+            });
+
+            // Then simulate click on the first button to set its active state
+            const firstButton = navButtons[0]; // Use cached navButtons
+            if (firstButton) {
+                const onclickAttr = firstButton.getAttribute('onclick');
+                const configKeyMatch = onclickAttr.match(/'([^']+)'/);
+                if (configKeyMatch && configKeyMatch[1]) {
+                    selectConfiguration(configKeyMatch[1]);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
