@@ -40,18 +40,6 @@ const configurations = {
     }
 };
 
-// Map browser names to Tailwind color classes for background and border
-// Defined outside components for performance
-const colorMap = {
-    edge: { bar: 'bg-teal-500', border: 'border-teal-400' },
-    chrome: { bar: 'bg-yellow-400', border: 'border-yellow-300' },
-    firefox: { bar: 'bg-orange-500', border: 'border-orange-400' },
-    brave: { bar: 'bg-amber-500', border: 'border-amber-400' },
-    opera: { bar: 'bg-red-500', border: 'border-red-400' },
-    safari: { bar: 'bg-blue-500', border: 'border-blue-400' }, // For actual Safari score
-    'safari-na': { bar: 'bg-gray-400', border: 'border-gray-300' } // For Safari Not Available
-};
-
 // Browser logo URLs
 // Defined outside components for performance
 const browserLogos = {
@@ -158,39 +146,54 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
     const isSafariNA = browserName === 'safari' && score === 0;
     const barWidth = `calc((${score} / ${maxScore}) * 100%)`;
 
-    // Helper functions to return full, static Tailwind class strings
-    const getBarBgClass = (name, isNA) => {
-        if (isNA) return 'bg-gray-400';
-        switch (name) {
-            case 'edge': return 'bg-teal-500';
-            case 'chrome': return 'bg-yellow-400';
-            case 'firefox': return 'bg-orange-500';
-            case 'brave': return 'bg-amber-500';
-            case 'opera': return 'bg-red-500';
-            case 'safari': return 'bg-blue-500';
-            default: return 'bg-gray-500'; // Fallback
-        }
-    };
+    // Determine classes based on browserName and isSafariNA
+    // Explicitly define full class strings for Tailwind to pick up reliably
+    let barBgClass = '';
+    let borderClass = '';
+    let scoreTextClass = 'text-gray-600'; // Default for points
 
-    const getBorderClass = (name, isNA) => {
-        if (isNA) return 'border-gray-300';
-        switch (name) {
-            case 'edge': return 'border-teal-400';
-            case 'chrome': return 'border-yellow-300';
-            case 'firefox': return 'border-orange-400';
-            case 'brave': return 'border-amber-400';
-            case 'opera': return 'border-red-400';
-            case 'safari': return 'border-blue-400';
-            default: return 'border-gray-400'; // Fallback
+    if (isSafariNA) {
+        barBgClass = 'bg-gray-400';
+        borderClass = 'border-gray-300';
+        scoreTextClass = 'text-gray-600'; // For "Not available" text
+    } else {
+        switch (browserName) {
+            case 'edge':
+                barBgClass = 'bg-teal-500';
+                borderClass = 'border-teal-400';
+                break;
+            case 'chrome':
+                barBgClass = 'bg-yellow-400';
+                borderClass = 'border-yellow-300';
+                break;
+            case 'firefox':
+                barBgClass = 'bg-orange-500';
+                borderClass = 'border-orange-400';
+                break;
+            case 'brave':
+                barBgClass = 'bg-amber-500';
+                borderClass = 'border-amber-400';
+                break;
+            case 'opera':
+                barBgClass = 'bg-red-500';
+                borderClass = 'border-red-400';
+                break;
+            case 'safari': // This case is for when Safari *does* have a score > 0
+                barBgClass = 'bg-blue-500';
+                borderClass = 'border-blue-400';
+                break;
+            default:
+                // Fallback or error case
+                barBgClass = 'bg-gray-500';
+                borderClass = 'border-gray-400';
+                break;
         }
-    };
-
-    const scoreTextClass = isSafariNA ? 'text-gray-600' : 'text-gray-600'; // Still consistent
+    }
 
     return (
         <div className={`
             bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center text-center border-2
-            ${getBorderClass(browserName, isSafariNA)}
+            ${borderClass}
             hover:scale-103 hover:shadow-2xl transition-all duration-300 ease-in-out
         `} data-browser={browserName}>
             <img
@@ -202,7 +205,7 @@ const BrowserCard = memo(({ browserName, score, maxScore }) => {
             />
             <p className="font-semibold text-xl text-gray-800 mb-2 capitalize">{browserName}</p>
             <div className="w-full h-8 bg-gray-200 rounded-lg overflow-hidden flex items-center">
-                <div className={`h-full ${getBarBgClass(browserName, isSafariNA)} rounded-lg`} style={{ width: barWidth }}></div>
+                <div className={`h-full ${barBgClass} rounded-lg`} style={{ width: barWidth }}></div>
             </div>
             <div className="flex items-baseline mt-3">
                 <span className="font-bold text-3xl text-gray-900 mr-1">
