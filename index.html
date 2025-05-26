@@ -22,7 +22,6 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            /* height: 100%; Removed to allow height to shrink */
             border-width: 2px; /* Add border width */
             transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
         }
@@ -31,41 +30,33 @@
             transform: scale(1.03); /* Slight enlargement on hover */
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
         }
-        /* Container for vertical browser performance bars */
-        .browser-bar-vertical-container {
-            width: 40px; /* Width of the vertical bar */
-            height: 120px; /* Reduced by 20% from 150px (150 * 0.8 = 120) */
+        /* Container for horizontal browser performance bars */
+        .browser-bar-horizontal-container {
+            width: 100%; /* Takes full width of the card */
+            height: 30px; /* Fixed height for the horizontal bar */
             background-color: #e2e8f0; /* Lighter gray for bar background */
             border-radius: 0.5rem; /* Rounded corners for bar container */
             overflow: hidden;
             display: flex;
-            align-items: flex-end; /* Bars grow from bottom */
-            margin-bottom: 0.75rem; /* Reduced margin-bottom */
+            align-items: center; /* Align content vertically within the bar */
+            /* margin-top: 0.75rem; Removed as score is now below */
         }
-        /* Styling for the vertical browser performance bars */
-        .browser-bar-vertical {
-            width: 100%;
-            /* Default color, overridden by specific browser classes */
-            background-color: #6366f1;
+        /* Styling for the horizontal browser performance bars */
+        .browser-bar-horizontal {
+            height: 100%; /* Takes full height of its container */
+            width: 0%; /* Initial width, will be set by JS */
+            background-color: #6366f1; /* Default color, overridden by specific browser classes */
             border-radius: 0.5rem; /* Rounded corners for the bar itself */
-            transition: height 0.7s ease-out; /* Smooth transition for height changes */
+            transition: width 0.7s ease-out; /* Smooth transition for width changes */
         }
         /* Colors corresponding to browser logos for bars */
-        .browser-bar-vertical.edge { background-color: #00A3A3; } /* Teal for Edge */
-        .browser-bar-vertical.chrome { background-color: #facc15; } /* Yellow from Chrome logo */
-        .browser-bar-vertical.firefox { background-color: #f97316; } /* Orange from Firefox logo */
-        .browser-bar-vertical.brave { background-color: #f59e0b; } /* Amber/Orange from Brave logo */
-        .browser-bar-vertical.opera { background-color: #ef4444; } /* Red from Opera logo */
-        .browser-bar-vertical.safari { background-color: #3b82f6; } /* Blue from Safari logo (used if score available) */
-        .browser-bar-vertical.safari-na { background-color: #94a3b8; } /* Gray for Safari (Not available) */
-
-        /* Maximum score for scaling is 50 */
-        .h-edge { height: calc((35.5 / 50) * 100%); }
-        .h-chrome { height: calc((35.1 / 50) * 100%); }
-        .h-firefox { height: calc((30.5 / 50) * 100%); }
-        .h-brave { height: calc((35.3 / 50) * 100%); }
-        .h-opera { height: calc((34.8 / 50) * 100%); }
-        .h-safari { height: calc((34.5 / 50) * 100%); } /* Minimum height for Safari visibility */
+        .browser-bar-horizontal.edge { background-color: #00A3A3; } /* Teal for Edge */
+        .browser-bar-horizontal.chrome { background-color: #facc15; } /* Yellow from Chrome logo */
+        .browser-bar-horizontal.firefox { background-color: #f97316; } /* Orange from Firefox logo */
+        .browser-bar-horizontal.brave { background-color: #f59e0b; } /* Amber/Orange from Brave logo */
+        .browser-bar-horizontal.opera { background-color: #ef4444; } /* Red from Opera logo */
+        .browser-bar-horizontal.safari { background-color: #3b82f6; } /* Blue for Safari logo (used if score available) */
+        .browser-bar-horizontal.safari-na { background-color: #94a3b8; } /* Gray for Safari (Not available) */
 
         /* Border colors of tiles according to graphs */
         .browser-card.border-edge { border-color: #00A3A3; }
@@ -148,61 +139,67 @@
             <div class="browser-card border-edge" data-browser="edge">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/48px-Microsoft_Edge_logo_%282019%29.svg.png" alt="Edge browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Edge';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-700 mb-2">Edge</p>
-                <div class="browser-bar-vertical-container">
-                    <div class="browser-bar-vertical edge"></div>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal edge"></div>
                 </div>
-                <span class="font-bold text-2xl text-gray-800"></span>
-                <span class="text-sm text-gray-500">points</span>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
             </div>
 
             <div class="browser-card border-chrome" data-browser="chrome">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/48px-Google_Chrome_icon_%28September_2014%29.svg.png" alt="Chrome browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Chrome';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-700 mb-2">Chrome</p>
-                <div class="browser-bar-vertical-container">
-                    <div class="browser-bar-vertical chrome"></div>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal chrome"></div>
                 </div>
-                <span class="font-bold text-2xl text-gray-800"></span>
-                <span class="text-sm text-gray-500">points</span>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
             </div>
 
             <div class="browser-card border-brave" data-browser="brave">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" alt="Brave browser logo" class="w-auto h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Brave';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-700 mb-2">Brave</p>
-                <div class="browser-bar-vertical-container">
-                    <div class="browser-bar-vertical brave"></div>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal brave"></div>
                 </div>
-                <span class="font-bold text-2xl text-gray-800"></span>
-                <span class="text-sm text-gray-500">points</span>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
             </div>
 
             <div class="browser-card border-opera" data-browser="opera">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Opera_2015_icon.svg/48px-Opera_2015_icon.svg.png" alt="Opera browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Opera';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-700 mb-2">Opera</p>
-                <div class="browser-bar-vertical-container">
-                    <div class="browser-bar-vertical opera"></div>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal opera"></div>
                 </div>
-                <span class="font-bold text-2xl text-gray-800"></span>
-                <span class="text-sm text-gray-500">points</span>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
             </div>
 
             <div class="browser-card border-firefox" data-browser="firefox">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/48px-Firefox_logo%2C_2019.svg.png" alt="Firefox browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Firefox';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-700 mb-2">Firefox</p>
-                <div class="browser-bar-vertical-container">
-                    <div class="browser-bar-vertical firefox"></div>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal firefox"></div>
                 </div>
-                <span class="font-bold text-2xl text-gray-800"></span>
-                <span class="text-sm text-gray-500">points</span>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">points</span>
+                </div>
             </div>
 
             <div class="browser-card border-safari-na" data-browser="safari">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Safari_browser_logo.svg/48px-Safari_browser_logo.svg.png" alt="Safari browser logo" class="w-12 h-12 mb-2" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Safari';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-700 mb-2">Safari</p>
-                <div class="browser-bar-vertical-container">
-                    <div class="browser-bar-vertical safari-na"></div>
+                <div class="browser-bar-horizontal-container">
+                    <div class="browser-bar-horizontal safari-na"></div>
                 </div>
-                <span class="font-bold text-2xl text-gray-800"></span>
-                <span class="text-sm text-gray-500">(Not available / Not tested)</span>
+                <div class="flex items-baseline mt-2"> <span class="font-bold text-2xl text-gray-800 mr-1"></span>
+                    <span class="text-sm text-gray-500">(Not available / Not tested)</span>
+                </div>
             </div>
         </div>
 
@@ -280,20 +277,21 @@
                 const browserName = browser.name;
                 const score = browser.score;
 
-                // Update bar height
-                const bar = card.querySelector(`.browser-bar-vertical.${browserName}, .browser-bar-vertical.safari-na`);
+                // Update bar width
+                const bar = card.querySelector(`.browser-bar-horizontal.${browserName}, .browser-bar-horizontal.safari-na`);
                 if (bar) {
-                    bar.style.height = `calc((${score} / ${maxScore}) * 100%)`;
+                    bar.style.width = `calc((${score} / ${maxScore}) * 100%)`;
                 }
 
                 // Update score text
-                const scoreSpan = card.querySelector('span:first-of-type');
+                // Select the span within the new flex container
+                const scoreSpan = card.querySelector('.flex.items-baseline span:first-of-type');
                 if (scoreSpan) {
                     scoreSpan.textContent = score.toFixed(1);
                 }
 
                 // Handle Safari specific styling and text
-                const textSpan = card.querySelector('span:last-of-type');
+                const textSpan = card.querySelector('.flex.items-baseline span:last-of-type');
                 if (browserName === 'safari') {
                     if (score > 0) {
                         if (bar) {
@@ -328,16 +326,16 @@
 
             // Reset all buttons to their default (non-active) state and apply correct border colors
             navButtons.forEach(button => { // Use cached navButtons
-                button.classList.remove('bg-blue-500', 'bg-green-500', 'text-white'); // Remove active styles and fill colors
+                button.classList.remove('bg-blue-500', 'bg-green-700', 'text-white'); // Remove active styles and fill colors
                 button.classList.add('bg-white', 'text-gray-800'); // Apply default text/background
 
                 // Remove any specific border colors
-                button.classList.remove('border-green-500', 'border-blue-500');
+                button.classList.remove('border-green-700', 'border-blue-500');
 
                 // Reapply the correct border color based on its configKey
                 const currentButtonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
                 if (currentButtonConfigKey === 'config2') {
-                    button.classList.add('border-green-500');
+                    button.classList.add('border-green-700');
                 } else {
                     button.classList.add('border-blue-500');
                 }
@@ -351,7 +349,7 @@
 
                 // Apply fill color based on its configKey
                 if (configKey === 'config2') {
-                    selectedButton.classList.add('bg-green-500');
+                    selectedButton.classList.add('bg-green-700');
                 } else {
                     selectedButton.classList.add('bg-blue-500');
                 }
@@ -375,7 +373,7 @@
                 button.classList.add('border-4'); // Make borders bold
                 const buttonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
                 if (buttonConfigKey === 'config2') {
-                    button.classList.add('border-green-500');
+                    button.classList.add('border-green-700');
                 } else {
                     button.classList.add('border-blue-500');
                 }
