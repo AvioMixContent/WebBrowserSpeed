@@ -297,6 +297,7 @@ const App = () => {
         <div className="flex flex-col items-center min-h-screen bg-gray-50 font-inter">
             {/* Hidden div to ensure all dynamic Tailwind classes are included in the build */}
             {/* This is a workaround for Tailwind JIT mode with dynamic class generation when using CDN */}
+            {/* It explicitly lists all possible class combinations used dynamically in the components */}
             <div className="hidden">
                 {/* Browser Card Colors */}
                 <div className="border-teal-400 bg-teal-500"></div>
