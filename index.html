@@ -190,10 +190,12 @@
             width: 100%;
             max-width: 1152px; /* Increased max-width for a wider layout (72rem) */
             background-color: #ffffff;
-            padding: 2.5rem; /* More generous padding */
+            /* Adjusted padding to control top spacing specifically */
+            padding: 0 2.5rem 2.5rem 2.5rem; /* Top padding is now 0, others remain 2.5rem */
             border-radius: 1.5rem; /* Larger border radius */
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); /* More prominent shadow for main container */
-            /* Removed margin-top and margin-bottom */
+            margin-top: 0; /* Removed margin-top */
+            margin-bottom: 0; /* Removed margin-bottom */
         }
 
         /* Header and Footer max-width to match main-container */
@@ -204,7 +206,7 @@
         /* Responsive adjustments */
         @media (min-width: 640px) {
             .main-container {
-                padding: 3rem;
+                padding: 0 3rem 3rem 3rem; /* Top padding is now 0, others remain 3rem */
             }
             /* For small screens (sm), display 2 buttons per row */
             nav ul {
@@ -213,7 +215,7 @@
         }
         @media (min-width: 768px) {
             .main-container {
-                padding: 4rem;
+                padding: 0 4rem 4rem 4rem; /* Top padding is now 0, others remain 4rem */
             }
             /* For medium screens (md) and up, display 4 buttons per row */
             nav ul {
@@ -255,7 +257,7 @@
                     <path d="M3.34 19.06a10 10 0 1 1 17.32 0"/>
                 </svg>
                 <div class="flex flex-col items-start">
-                    <h1 class="text-2xl sm:text-3xl font-bold leading-tight text-gray-800">Browsers Performance Overview</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight text-gray-800">Browsers Performance Overview</h1>
                     <h1 class="text-xs sm:text-sm font-bold leading-tight text-gray-800 mt-1">Speedometer 3.1</h1>
                 </div>
             </div>
