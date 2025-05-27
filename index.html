@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Base body styling */
+        /* Base body styling for consistent typography and background */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f0f2f5; /* Lighter gray background for a modern feel */
@@ -17,7 +17,7 @@
             min-height: 100vh;
             padding: 1.5rem 0; /* Add some vertical padding */
         }
-        /* Styling for individual browser cards */
+        /* Styling for individual browser cards to ensure consistent appearance and interactive effects */
         .browser-card {
             background-color: #ffffff;
             border-radius: 1.5rem; /* Even more rounded corners */
@@ -32,13 +32,13 @@
             position: relative; /* Needed for pseudo-elements for borders */
             overflow: hidden; /* Ensures border animation stays within bounds */
         }
-        /* Hover effect for browser cards */
+        /* Hover effect for browser cards, providing visual feedback on interaction */
         .browser-card:hover {
             transform: translateY(-5px) scale(1.02); /* Lift and slight enlargement on hover */
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
         }
 
-        /* Animated border effect */
+        /* Animated border effect for browser cards, enhancing visual appeal on hover */
         .browser-card::before {
             content: '';
             position: absolute;
@@ -61,7 +61,7 @@
             opacity: 1;
         }
 
-        /* Define custom properties for border colors */
+        /* Define custom properties for border colors, allowing for easy theme changes */
         .browser-card.border-edge {
             --border-start-color: #00A3A3;
             --border-end-color: #007a7a;
@@ -98,7 +98,7 @@
             border-color: #3b82f6;
         }
 
-        /* Container for horizontal browser performance bars */
+        /* Container for horizontal browser performance bars, providing a visual representation of scores */
         .browser-bar-horizontal-container {
             width: 100%; /* Takes full width of the card */
             height: 25px; /* Slightly reduced height for the horizontal bar */
@@ -109,7 +109,7 @@
             align-items: center; /* Align content vertically within the bar */
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Inner shadow for depth */
         }
-        /* Styling for the horizontal browser performance bars */
+        /* Styling for the horizontal browser performance bars, indicating performance level */
         .browser-bar-horizontal {
             height: 100%; /* Takes full height of its container */
             width: 0%; /* Initial width, will be set by JS */
@@ -125,7 +125,7 @@
             font-size: 0.875rem; /* Smaller font size for score */
             text-shadow: 0 1px 2px rgba(0,0,0,0.2); /* Subtle text shadow */
         }
-        /* Colors corresponding to browser logos for bars */
+        /* Colors corresponding to browser logos for bars, for visual consistency */
         .browser-bar-horizontal.edge { background-color: #00A3A3; }
         .browser-bar-horizontal.chrome { background-color: #facc15; }
         .browser-bar-horizontal.firefox { background-color: #f97316; }
@@ -134,7 +134,7 @@
         .browser-bar-horizontal.safari { background-color: #3b82f6; }
         .browser-bar-horizontal.safari-na { background-color: #94a3b8; }
 
-        /* Gradient for heading text - changed to left to right */
+        /* Gradient for heading text, adding a modern and dynamic visual effect */
         .text-gradient {
             background-image: linear-gradient(to right, #22c55e, #facc15, #f97316, #ef4444);
             -webkit-background-clip: text;
@@ -142,7 +142,7 @@
             color: transparent;
         }
 
-        /* Button styling for navigation */
+        /* Button styling for navigation, ensuring interactivity and visual appeal */
         nav button {
             border-width: 2px !important; /* Ensure border is applied */
             box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Subtle shadow for buttons */
@@ -175,7 +175,7 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
-        /* Specific active button colors */
+        /* Specific active button colors for visual distinction */
         nav button.active.border-blue-500 {
             background-color: #3b82f6; /* Blue */
             border-color: #3b82f6;
@@ -185,7 +185,7 @@
             border-color: #047857;
         }
 
-        /* Main content container styling */
+        /* Main content container styling, defining the layout and appearance of the central content area */
         .main-container {
             width: 100%;
             max-width: 1152px; /* Increased max-width for a wider layout (72rem) */
@@ -198,12 +198,12 @@
             margin-bottom: 0; /* Removed margin-bottom */
         }
 
-        /* Header and Footer max-width to match main-container */
+        /* Header and Footer max-width to match main-container for consistent layout */
         header, footer {
             max-width: 1152px; /* Increased max-width to match main-container */
         }
 
-        /* Responsive adjustments */
+        /* Responsive adjustments for different screen sizes, ensuring adaptability */
         @media (min-width: 640px) {
             .main-container {
                 padding: 0 3rem 3rem 3rem; /* Top padding is now 0, others remain 3rem */
@@ -272,10 +272,10 @@
                     <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config2')">7800X3D<br>RTX 4080 Super<br>32 GB DDR5 6000 MHz CL 28</button>
                 </li>
                 <li>
-                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config3')">i5 10400<br>-<br>16 GB DDR5 2666 MHz</button>
+                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config3')">i5 10400<br>-<br>16 GB DDR4 2666 MHz</button>
                 </li>
                 <li>
-                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config4')">i7 10750H<br>RTX 2070 Super laptop<br>16 GB DDR5 2666 MHz</button>
+                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config4')">i7 10750H<br>RTX 2070 Super laptop<br>16 GB DDR4 2666 MHz</button>
                 </li>
             </ul>
         </nav>
@@ -290,7 +290,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="browser-cards-container">
             <div class="browser-card border-edge" data-browser="edge">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/48px-Microsoft_Edge_logo_%282019%29.svg.png" alt="Logo prohlížeče Edge" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Edge';" loading="lazy"/>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/48px-Microsoft_Edge_logo_%282019%29.svg.png" alt="Edge browser logo" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Edge';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-800 mb-3">Edge</p>
                 <div class="browser-bar-horizontal-container">
                     <div class="browser-bar-horizontal edge"></div>
@@ -302,7 +302,7 @@
             </div>
 
             <div class="browser-card border-chrome" data-browser="chrome">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/48px-Google_Chrome_icon_%28September_2014%29.svg.png" alt="Logo prohlížeče Chrome" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Chrome';" loading="lazy"/>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_%28September_2014%29.svg/48px-Google_Chrome_icon_%28September_2014%29.svg.png" alt="Chrome browser logo" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Chrome';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-800 mb-3">Chrome</p>
                 <div class="browser-bar-horizontal-container">
                     <div class="browser-bar-horizontal chrome"></div>
@@ -314,7 +314,7 @@
             </div>
 
             <div class="browser-card border-brave" data-browser="brave">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" alt="Logo prohlížeče Brave" class="w-auto h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Brave';" loading="lazy"/>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Brave_icon_lionface.png" alt="Brave browser logo" class="w-auto h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Brave';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-800 mb-3">Brave</p>
                 <div class="browser-bar-horizontal-container">
                     <div class="browser-bar-horizontal brave"></div>
@@ -326,7 +326,7 @@
             </div>
 
             <div class="browser-card border-opera" data-browser="opera">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Opera_2015_icon.svg/48px-Opera_2015_icon.svg.png" alt="Logo prohlížeče Opera" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Opera';" loading="lazy"/>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Opera_2015_icon.svg/48px-Opera_2015_icon.svg.png" alt="Opera browser logo" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Opera';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-800 mb-3">Opera</p>
                 <div class="browser-bar-horizontal-container">
                     <div class="browser-bar-horizontal opera"></div>
@@ -338,7 +338,7 @@
             </div>
 
             <div class="browser-card border-firefox" data-browser="firefox">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/48px-Firefox_logo%2C_2019.svg.png" alt="Logo prohlížeče Firefox" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Firefox';" loading="lazy"/>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/48px-Firefox_logo%2C_2019.svg.png" alt="Firefox browser logo" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Firefox';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-800 mb-3">Firefox</p>
                 <div class="browser-bar-horizontal-container">
                     <div class="browser-bar-horizontal firefox"></div>
@@ -350,7 +350,7 @@
             </div>
 
             <div class="browser-card border-safari-na" data-browser="safari">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Safari_browser_logo.svg/48px-Safari_browser_logo.svg.png" alt="Logo prohlížeče Safari" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Safari';" loading="lazy"/>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Safari_browser_logo.svg/48px-Safari_browser_logo.svg.png" alt="Safari browser logo" class="w-14 h-14 mb-3" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/000000?text=Safari';" loading="lazy"/>
                 <p class="font-semibold text-xl text-gray-800 mb-3">Safari</p>
                 <div class="browser-bar-horizontal-container">
                     <div class="browser-bar-horizontal safari-na"></div>
@@ -363,16 +363,18 @@
         </div>
 
         <p class="text-center text-gray-500 text-sm mt-12">
-            Testováno 26.5.2025. Verze prohlížečů jsou vždy nejnovější k datu testování.
+            Tested on 26.5.2025. Browser versions are always the latest as of the testing date.
         </p>
     </div>
 
     <footer class="w-full mx-auto bg-gray-900 text-gray-300 text-center py-5 shadow-lg rounded-t-xl z-20">
-        <p class="text-sm">&copy; 2025 Rychlost webových prohlížečů. Všechna práva vyhrazena.</p>
+        <p class="text-sm">&copy; 2025 Web Browser Speed. All rights reserved.</p>
     </footer>
 
     <script>
-        // Data for each PC configuration, including browser performance scores
+        // Data for each PC configuration, including browser performance scores.
+        // This object stores the Speedometer 3.1 scores for different browsers
+        // across various hardware configurations.
         const configurations = {
             'config1': { // i7 13980HX, RTX 4090 laptop, 32 GB DDR5 4800 MHz
                 edge: 35.5,
@@ -380,7 +382,7 @@
                 firefox: 26.0,
                 brave: 33.6,
                 opera: 32.2,
-                safari: 0.0
+                safari: 0.0 // Safari is not available for testing on this configuration
             },
             'config2': { // 7800X3D, RTX 4080 Super, 32 GB RAM DDR5 6000 MHz @ CL 28
                 edge: 34.9,
@@ -388,77 +390,82 @@
                 firefox: 28.5,
                 brave: 34.1,
                 opera: 33.5,
-                safari: 0.0
+                safari: 0.0 // Safari is not available for testing on this configuration
             },
-            'config3': { // i5 10400, 16 GB DDR5 2666 MHz
+            'config3': { // i5 10400, 16 GB DDR4 2666 MHz
                 edge: 18.3,
                 chrome: 17.3,
                 firefox: 14.9,
                 brave: 17.1,
                 opera: 16.2,
-                safari: 0.0
+                safari: 0.0 // Safari is not available for testing on this configuration
             },
-            'config4': { // i7 10750H, RTX 2070 Super laptop, 16 GB DDR5 2666 MHz
+            'config4': { // i7 10750H, RTX 2070 Super laptop, 16 GB DDR4 2666 MHz
                 edge: 19.0,
                 chrome: 18.7,
                 firefox: 15.5,
                 brave: 18.5,
                 opera: 17.8,
-                safari: 0.0
+                safari: 0.0 // Safari is not available for testing on this configuration
             }
         };
 
-        // Cache frequently accessed DOM elements
-        let navButtons;
-        let browserCardsContainer;
-        let browserCardElements; // Array of the actual browser card DOM elements
+        // Cache frequently accessed DOM elements to minimize repeated lookups, improving performance.
+        let navButtons;            // Stores all navigation buttons
+        let browserCardsContainer; // The container holding all browser performance cards
+        let browserCardElements;   // An array of the individual browser card DOM elements
 
         /**
-         * Updates the displayed browser speeds based on the provided data and sorts the cards.
-         * @param {object} data - An object containing scores for each browser.
+         * Updates the displayed browser speeds based on the provided data and sorts the cards
+         * dynamically to reflect the current performance ranking.
+         * @param {object} data - An object containing scores for each browser (e.g., { edge: 35.5, chrome: 35.2, ... }).
          */
         function updateBrowserSpeeds(data) {
-            const maxScore = 50; // Maximum score for scaling the bars
+            const maxScore = 50; // Defines the maximum possible score for scaling the performance bars.
 
-            // Create an array of objects with browser data and their corresponding DOM elements
+            // Create a temporary array of objects, each containing browser name, score, and its DOM element.
+            // This allows for sorting based on score while maintaining a reference to the DOM element.
             const browsersWithScores = browserCardElements.map(card => {
                 const browserName = card.getAttribute('data-browser');
                 const score = data[browserName];
                 return { name: browserName, score: score, element: card };
             });
 
-            // Sort the browsers by score in descending order
+            // Sort the browsers by score in descending order (highest score first).
             browsersWithScores.sort((a, b) => b.score - a.score);
 
-            // Reorder existing DOM nodes based on sorted data
+            // Reorder existing DOM nodes based on the newly sorted data.
+            // Appending an existing child to a parent automatically moves it within the parent.
             browsersWithScores.forEach(browser => {
                 const card = browser.element;
                 const browserName = browser.name;
                 const score = browser.score;
 
-                // Update bar width
+                // Select the horizontal performance bar for the current browser.
                 const bar = card.querySelector(`.browser-bar-horizontal.${browserName}, .browser-bar-horizontal.safari-na`);
                 if (bar) {
+                    // Calculate and set the width of the bar based on the score relative to the maxScore.
                     bar.style.width = `calc((${score} / ${maxScore}) * 100%)`;
-                    // Removed the line that sets textContent for the bar
-                    // bar.textContent = score.toFixed(1); // THIS LINE WAS REMOVED
                 }
 
-                // Update score text below the bar (for Safari N/A)
+                // Select the score display elements below the bar.
                 const scoreSpan = card.querySelector('.flex.items-baseline span:first-of-type');
                 const textSpan = card.querySelector('.flex.items-baseline span:last-of-type');
 
+                // Handle Safari's "Not available / Not tested" status specifically.
                 if (browserName === 'safari') {
                     if (score > 0) {
+                        // If Safari has a score (meaning it was tested), update its appearance.
                         if (bar) {
                             bar.classList.remove('safari-na');
                             bar.classList.add('safari');
                         }
                         card.classList.remove('border-safari-na');
                         card.classList.add('border-safari');
-                        if (scoreSpan) scoreSpan.textContent = score.toFixed(1);
+                        if (scoreSpan) scoreSpan.textContent = score.toFixed(1); // Display score with one decimal place
                         if (textSpan) textSpan.textContent = 'points';
                     } else {
+                        // If Safari has no score, display the "Not available" message.
                         if (bar) {
                             bar.classList.remove('safari');
                             bar.classList.add('safari-na');
@@ -469,31 +476,34 @@
                         if (textSpan) textSpan.textContent = '(Not available / Not tested)';
                     }
                 } else {
+                    // For other browsers, simply display their scores.
                     if (scoreSpan) scoreSpan.textContent = score.toFixed(1);
                     if (textSpan) textSpan.textContent = 'points';
                 }
 
-                // Append the card to reorder it in the DOM. This is efficient as it's moving existing nodes.
+                // Append the card back to its container. This reorders the DOM elements
+                // according to the sorted `browsersWithScores` array, effectively sorting the displayed cards.
                 browserCardsContainer.appendChild(card);
             });
         }
 
         /**
-         * Handles the selection of a PC configuration and updates the UI accordingly.
-         * @param {string} configKey - The key of the selected configuration (e.g., 'config1').
+         * Handles the selection of a PC configuration button and updates the UI
+         * to reflect the active configuration and its corresponding browser speeds.
+         * @param {string} configKey - The key of the selected configuration (e.g., 'config1', 'config2').
          */
         function selectConfiguration(configKey) {
             console.log("Selected PC configuration:", configKey);
 
-            // Reset all buttons to their default (non-active) state and apply correct border colors
-            navButtons.forEach(button => { // Use cached navButtons
+            // Iterate over all navigation buttons to reset their active state and apply default styling.
+            navButtons.forEach(button => {
                 button.classList.remove('bg-blue-500', 'bg-green-700', 'text-white'); // Remove active styles and fill colors
                 button.classList.add('bg-white', 'text-gray-800'); // Apply default text/background
 
-                // Remove any specific border colors
+                // Remove any specific border colors that might have been applied by an active state.
                 button.classList.remove('border-green-700', 'border-blue-500');
 
-                // Reapply the correct border color based on its configKey
+                // Reapply the correct default border color based on the button's associated configuration.
                 const currentButtonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
                 if (currentButtonConfigKey === 'config2') {
                     button.classList.add('border-green-700');
@@ -502,13 +512,13 @@
                 }
             });
 
-            // Apply active styles to the clicked button
-            const selectedButton = Array.from(navButtons).find(button => button.getAttribute('onclick').includes(configKey)); // Use cached navButtons
+            // Find the button that was just clicked and apply active styles to it.
+            const selectedButton = Array.from(navButtons).find(button => button.getAttribute('onclick').includes(configKey));
             if (selectedButton) {
                 selectedButton.classList.remove('bg-white', 'text-gray-800'); // Remove default text/background
                 selectedButton.classList.add('text-white'); // Apply active text color
 
-                // Apply fill color based on its configKey
+                // Apply the specific fill color for the active button based on its configuration key.
                 if (configKey === 'config2') {
                     selectedButton.classList.add('bg-green-700');
                 } else {
@@ -516,21 +526,21 @@
                 }
             }
 
-            // Update the browser speeds based on the selected configuration data
+            // Update the browser speeds displayed on the page using the data from the selected configuration.
             if (configurations[configKey]) {
                 updateBrowserSpeeds(configurations[configKey]);
             }
         }
 
-        // Initial setup on page load
+        // Initial setup function, executed once the DOM is fully loaded.
         document.addEventListener('DOMContentLoaded', () => {
-            // Cache DOM elements on load
+            // Cache DOM elements for efficient access throughout the script's lifecycle.
             navButtons = document.querySelectorAll('nav button');
             browserCardsContainer = document.getElementById('browser-cards-container');
             browserCardElements = Array.from(browserCardsContainer.children);
 
-            // Apply correct borders and initial state to all buttons
-            navButtons.forEach(button => { // Use cached navButtons
+            // Apply correct initial borders to all navigation buttons.
+            navButtons.forEach(button => {
                 button.classList.add('border-4'); // Make borders bold
                 const buttonConfigKey = button.getAttribute('onclick').match(/'([^']+)'/)[1];
                 if (buttonConfigKey === 'config2') {
@@ -540,8 +550,8 @@
                 }
             });
 
-            // Then simulate click on the first button to set its active state
-            const firstButton = navButtons[0]; // Use cached navButtons
+            // Simulate a click on the first button to set the initial active configuration and display its data.
+            const firstButton = navButtons[0];
             if (firstButton) {
                 const onclickAttr = firstButton.getAttribute('onclick');
                 const configKeyMatch = onclickAttr.match(/'([^']+)'/);
