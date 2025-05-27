@@ -150,6 +150,8 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
+            min-height: 72px; /* Ensures consistent height for 3 lines of text */
+            font-size: 0.625rem; /* Force text-xs (10px) to ensure 3 lines */
         }
 
         nav button::before {
@@ -205,10 +207,18 @@
             .main-container {
                 padding: 3rem;
             }
+            /* For small screens (sm), display 2 buttons per row */
+            nav ul {
+                grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 columns */
+            }
         }
         @media (min-width: 768px) {
             .main-container {
                 padding: 4rem;
+            }
+            /* For medium screens (md) and up, display 4 buttons per row */
+            nav ul {
+                grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 columns */
             }
         }
     </style>
@@ -253,18 +263,18 @@
         </div>
 
         <nav class="w-full mb-8">
-            <ul class="flex flex-wrap justify-center gap-3">
-                <li class="flex-1 min-w-[150px] max-w-[calc(50%-0.75rem)] sm:max-w-[calc(25%-0.75rem)]">
-                    <button class="w-full px-3 py-3 rounded-xl bg-white text-gray-800 text-xs sm:text-sm font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config1')">i7 13980HX<br>RTX 4090 laptop<br>32 GB DDR5 4800 MHz</button>
+            <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
+                <li>
+                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config1')">i7 13980HX<br>RTX 4090 laptop<br>32 GB DDR5 4800 MHz</button>
                 </li>
-                <li class="flex-1 min-w-[150px] max-w-[calc(50%-0.75rem)] sm:max-w-[calc(25%-0.75rem)]">
-                    <button class="w-full px-3 py-3 rounded-xl bg-white text-gray-800 text-xs sm:text-sm font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config2')">7800X3D<br>RTX 4080 Super<br>32 GB DDR5 6000 MHz CL 28</button>
+                <li>
+                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config2')">7800X3D<br>RTX 4080 Super<br>32 GB DDR5 6000 MHz CL 28</button>
                 </li>
-                <li class="flex-1 min-w-[150px] max-w-[calc(50%-0.75rem)] sm:max-w-[calc(25%-0.75rem)]">
-                    <button class="w-full px-3 py-3 rounded-xl bg-white text-gray-800 text-xs sm:text-sm font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config3')">i5 10400<br>-<br>16 GB DDR5 2666 MHz</button>
+                <li>
+                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config3')">i5 10400<br>-<br>16 GB DDR5 2666 MHz</button>
                 </li>
-                <li class="flex-1 min-w-[150px] max-w-[calc(50%-0.75rem)] sm:max-w-[calc(25%-0.75rem)]">
-                    <button class="w-full px-3 py-3 rounded-xl bg-white text-gray-800 text-xs sm:text-sm font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config4')">i7 10750H<br>RTX 2070 Super laptop<br>16 GB DDR5 2666 MHz</button>
+                <li>
+                    <button class="w-full h-full px-3 py-3 rounded-xl bg-white text-gray-800 font-semibold border-4 shadow-md text-center hover:scale-105 hover:shadow-xl active:scale-98 transition-all duration-300 ease-in-out" onclick="selectConfiguration('config4')">i7 10750H<br>RTX 2070 Super laptop<br>16 GB DDR5 2666 MHz</button>
                 </li>
             </ul>
         </nav>
